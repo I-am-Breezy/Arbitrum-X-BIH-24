@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.18;
+
+contract DonationSmartContract {
+   address immutable public owner;
+
+   mapping(address => uint256) public _balances;
+   constructor () 
+   {
+    owner = msg.sender;
+
+    
+   }
+   
+   function deposit(uint256 amount) public payable {
+        if(amount == 0) {
+         revert ("Deposit cannot be zero!");
+        }
+        _balances[msg.sender] += amount;
+       
+   }
+   
+
+   function withdraw(uint256 amount) public {
+        if (amount < address(this).balance) {
+            revert (" You cannot withdraw amount below this contract's balance");
+         }
+         
+
+     _balances[msg.sender] -= amount;
+      payable(msg.sender).transfer(amount);
+   }
+   
+   function getBalance(address account) public view returns (uint256) {
+    return _balances[account];
+
+
+   }
+   
+}
